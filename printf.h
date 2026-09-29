@@ -40,14 +40,21 @@
 extern "C" {
 #endif
 
-
 /**
  * Output a character to a custom device like UART, used by the printf() function
  * This function is declared here only. You have to write your custom implementation somewhere
  * \param character Character to output
+ *
+ * ==== Extended ====
+ * The character will output' \0' as the end of printf, which needs to be processed by the user.
  */
 void _putchar(char character);
 
+/**
+ * Wide string to multibyte string
+ *
+ */
+int _wstr_to_str(const wchar_t* wstr, int wlen, char* str, int slen);
 
 /**
  * Tiny printf implementation
@@ -78,9 +85,8 @@ int sprintf_(char* buffer, const char* format, ...);
  * \param count The maximum number of characters to store in the buffer, including a terminating null character
  * \param format A string that specifies the format of the output
  * \param va A value identifying a variable arguments list
- * \return The number of characters that COULD have been written into the buffer, not counting the terminating
- *         null character. A value equal or larger than count indicates truncation. Only when the returned value
- *         is non-negative and less than count, the string has been completely written.
+ * \return The number of characters that are WRITTEN into the buffer, not counting the terminating null character
+ *         If the formatted string is truncated the buffer size (count) is returned
  */
 #define snprintf  snprintf_
 #define vsnprintf vsnprintf_
