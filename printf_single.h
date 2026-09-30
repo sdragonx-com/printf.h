@@ -25,6 +25,18 @@
 // #define PRINTF_IMPLEMENTATION   // Header only
 // #define PRINTF_OVERLAY_STDIO    // Overlay standard library function
 
+// PRINTF_API
+#ifdef PRINTF_IMPLEMENTATION
+    #ifndef PRINTF_API
+        #define PRINTF_API inline
+    #endif
+#else
+    #ifndef PRINTF_API
+        #define PRINTF_API
+    #endif
+#endif
+
+// PRINTF_PREFIX
 #ifndef PRINTF_PREFIX
     #define PRINTF_PREFIX(fn)   mp_##fn
 #endif
@@ -78,7 +90,7 @@ int _wstr_to_str(const wchar_t* wstr, int wlen, char* str, int slen);
  * \param format A string that specifies the format of the output
  * \return The number of characters that are written into the array, not counting the terminating null character
  */
-int PRINTF_PREFIX(printf)(const char* format, ...);
+PRINTF_API int PRINTF_PREFIX(printf)(const char* format, ...);
 
 
 /**
@@ -88,7 +100,7 @@ int PRINTF_PREFIX(printf)(const char* format, ...);
  * \param format A string that specifies the format of the output
  * \return The number of characters that are WRITTEN into the buffer, not counting the terminating null character
  */
-int PRINTF_PREFIX(sprintf)(char* buffer, const char* format, ...);
+PRINTF_API int PRINTF_PREFIX(sprintf)(char* buffer, const char* format, ...);
 
 
 /**
@@ -100,8 +112,8 @@ int PRINTF_PREFIX(sprintf)(char* buffer, const char* format, ...);
  * \return The number of characters that are WRITTEN into the buffer, not counting the terminating null character
  *         If the formatted string is truncated the buffer size (count) is returned
  */
-int  PRINTF_PREFIX(snprintf)(char* buffer, size_t count, const char* format, ...);
-int PRINTF_PREFIX(vsnprintf)(char* buffer, size_t count, const char* format, va_list va);
+PRINTF_API int  PRINTF_PREFIX(snprintf)(char* buffer, size_t count, const char* format, ...);
+PRINTF_API int PRINTF_PREFIX(vsnprintf)(char* buffer, size_t count, const char* format, va_list va);
 
 
 /**
@@ -110,7 +122,7 @@ int PRINTF_PREFIX(vsnprintf)(char* buffer, size_t count, const char* format, va_
  * \param va A value identifying a variable arguments list
  * \return The number of characters that are WRITTEN into the buffer, not counting the terminating null character
  */
-int PRINTF_PREFIX(vprintf)(const char* format, va_list va);
+PRINTF_API int PRINTF_PREFIX(vprintf)(const char* format, va_list va);
 
 
 /**
@@ -121,7 +133,7 @@ int PRINTF_PREFIX(vprintf)(const char* format, va_list va);
  * \param format A string that specifies the format of the output
  * \return The number of characters that are sent to the output function, not counting the terminating null character
  */
-int PRINTF_PREFIX(fctprintf)(void (*out)(char character, void* arg), void* arg, const char* format, ...);
+PRINTF_API int PRINTF_PREFIX(fctprintf)(void (*out)(char character, void* arg), void* arg, const char* format, ...);
 
 #ifdef __cplusplus
 } // end namespace PRINTF_NAMESPACE
@@ -198,12 +210,6 @@ int PRINTF_PREFIX(fctprintf)(void (*out)(char character, void* arg), void* arg, 
 // sdragonx 2026-09-29
 #ifndef PRINTF_USE_DEFAULT_PUTC
     #define PRINTF_USE_DEFAULT_PUTC 1
-#endif
-
-#ifdef PRINTF_IMPLEMENTATION
-    #ifndef PRINTF_API
-        #define PRINTF_API inline
-    #endif
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
